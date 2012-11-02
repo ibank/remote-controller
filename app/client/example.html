@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head lang="kr">
+<meta charset="utf-8">
+<title>모바일 컨트롤러 응답 예제</title>
+
+</head>
+<body>
+
+<script src="static/js/lib/jquery.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  var serverUrl = 'http://10.64.85.178';
+  
+  var socket = io.connect(serverUrl + '/rc');
+  socket.on('connect', function () {
+    
+    // 방 생성 요청
+    socket.emit('create-room');
+    
+    // 방 생성이 완료된 경우
+    socket.on('room-created', function (roomKey) {
+      console.log('연결됨', roomKey);   
+    });
+    
+    // move 이벤트가 발생한 경우
+    socket.on('move', function (data) {
+      // 0=위, 1=오른쪽, 2=아래, 3=왼쪽, 4=버튼1, 5=버튼2
+      console.log('move:', data);
+    });
+    
+  });
+  
+
+</script>  
+</body>
+</html>

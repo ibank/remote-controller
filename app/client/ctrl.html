@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="kr">
+<head>
+<meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+<meta charset="utf-8">
+<title>리모트 컨트롤러</title>
+
+<link href="static/css/bootstrap.css" rel="stylesheet">
+<link href="static/css/bootstrap-responsive.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="./ctrl">리모트 컨트롤러</a>
+    </div>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <!-- 연결 전 -->
+  <div id="join-area">
+    <div class="span12">
+      <strong>리모콘 채널을 입력하세요.</strong>
+    </div>
+    <div class="span12">
+      <div class="input-append">
+        <input class="span2" id="room-key" type="number">
+        <button id="connect" class="btn btn-primary" type="button">연결하기</button>
+      </div>
+    </div>
+  </div>
+  <!-- //연결 전 -->
+  
+  <!-- 연결 후 -->
+  <div id="ctrl-area" class="hide" style="margin-top:-20px;">
+    <div id="ctrl"></div>
+    <div class="span12" style="text-align:center;">
+      <button id="btn-a" class="btn btn-large" style="width:40%;margin:0 5px;">버튼 A</button>  
+      <button id="btn-b" class="btn btn-large" style="width:40%;margin:0 5px;">버튼 B</button>  
+    </div>
+  </div>
+  <!-- //연결 후 -->
+  
+</div>
+
+<!-- 연결 실패 알람창 -->
+<div class="alert alert-block alert-error fade in hide">
+  <button type="button" class="close">×</button>
+  <h4 class="alert-heading">연결하지 못했습니다.</h4>
+  <p>PC에서 생성한 리모콘 연결 코드를 다시 확인해보세요.</p>
+</div>
+<!-- //연결 실패 알람창 -->
+<script src="static/js/lib/raphael.js"></script>
+<script src="static/js/lib/require.js"></script>
+
+<script>
+requirejs.config({
+  baseUrl: 'static/js/lib',
+  paths: {
+    'ctrl': '../ctrl',
+    'socket.io': '/socket.io/socket.io.js'
+  },
+  shim: {
+    'socket.io': {
+      exports: 'io'
+    },
+    'bootstrap': {
+      deps: ['jquery'],
+      exports: 'bootstrap' 
+    },
+    'raphael': {
+      exports: 'Raphael' 
+    }
+  }
+});
+
+require([
+  'ctrl/socket-connector',
+  'ctrl/btn-ui'
+]);
+</script>
+</body>
+</html>
