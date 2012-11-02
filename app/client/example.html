@@ -3,9 +3,27 @@
 <head lang="kr">
 <meta charset="utf-8">
 <title>모바일 컨트롤러 응답 예제</title>
+<style>
+#cursor {position:absolute;left:150px;top:150px}
+#cursor .clicked{position:absolute;left:5px;top:-5px;display:none}
+#cursor.on .clicked{display:block}
+#cursor .arrow{position:absolute;}
+#url {color:blue; font-weight:bold}
+em {font-weight:bold; color:red}
 
+</style>
 </head>
 <body>
+<h2>모바일 컨트롤러 응답 예제</h2>
+<ol>
+<li>모바일 기기에서 <span id="url"></span> 으로 접속하세요.</li>
+<li>리모콘 채널으로 <em id="roomKey"></em> 을(를) 입력하고 연결하세요.</li>
+<li>리모콘의 가운데 원을 움직여 아래 커서를 움직일 수 있습니다.</li>
+</ol>
+<div id="cursor">
+  <img class="clicked" src="static/img/clicked.png">
+  <img class="arrow" src="static/img/cursor_arrow.png">
+</div>
 
 <script src="static/js/lib/jquery.js"></script>
 <script src="/socket.io/socket.io.js"></script>
@@ -21,13 +39,39 @@
     
     // 방 생성이 완료된 경우
     socket.on('room-created', function (roomKey) {
-      console.log('연결됨', roomKey);   
+      console.log('연결됨', roomKey);
+      
+      $('#url').text(serverUrl + '/ctrl');
+      $('#roomKey').text(roomKey);
     });
     
     // move 이벤트가 발생한 경우
     socket.on('move', function (data) {
       // 0=위, 1=오른쪽, 2=아래, 3=왼쪽, 4=버튼1, 5=버튼2
       console.log('move:', data);
+      
+      // 아래와 같이 적당히 변경해 사용하세요.
+      var $cursor = $('#cursor'),
+        offset = $cursor.offset(),
+        t, l;
+      
+      if (data[0]) t = -5;
+      if (data[1]) l = 5;
+      if (data[2]) t = 5;
+      if (data[3]) l = -5;
+      
+      $cursor.offset({
+        left: offset.left + l,
+        top: offset.top + t
+      });
+      
+      // btn a
+      if (data[4]) {
+        $cursor.addClass('on');
+      } else {
+        $cursor.removeClass('on');
+      }
+      
     });
     
   });
