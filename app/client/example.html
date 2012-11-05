@@ -29,7 +29,7 @@ em {font-weight:bold; color:red}
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
-  var serverUrl = 'http://10.64.85.178';
+  var serverUrl = 'http://' + location.host;
   
   var socket = io.connect(serverUrl + '/rc');
   socket.on('connect', function () {
